@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  DataSource del Sistema de Votacion para WildFly (IronJacamar).
+
+  Despliegue (piloto local):
+    - Copiar a:  $WILDFLY_HOME/standalone/deployments/votacion-ds.xml
+      (despliegue rapido para desarrollo), o
+    - Integrar el bloque <datasource> en el subsistema datasources de
+      standalone.xml (recomendado para configuracion estable).
+
+  Requisito previo: instalar el driver MySQL como modulo de WildFly
+    $WILDFLY_HOME/modules/com/mysql/main/  + module.xml
+  y registrar el <driver name="mysql"> en el subsistema.
+
+  rewriteBatchedStatements=true es CLAVE: convierte N INSERT en un unico
+  INSERT multi-fila, multiplicando el throughput de escritura de votos.
+-->
+<datasources xmlns="http://www.jboss.org/ironjacamar/schema">
+
+  <datasource jndi-name="java:/jdbc/VotacionDS"
+              pool-name="VotacionDS"
+              enabled="true"
+              use-java-context="true"
+              statistics-enabled="true">
+
+    <connection-url>jdbc:mysql://localhost:3306/votacion_nacional?serverTimezone=America/Santiago&amp;rewriteBatchedStatements=true&amp;cachePrepStmts=true&amp;useServerPrepStmts=true</connection-url>
+    <driver>mysql</driver>
+
+    <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
+
+    <!-- ============ POOL DE CONEXIONES ============
+         Tamano DELIBERADAMENTE moderado. Ver explicacion: un pool
+         gigante NO da mas throughput; satura MySQL. La cola JMS
+         absorbe el pico, asi que el pool se dimensiona para el
+         throughput SOSTENIDO de la BD, no para el pico de peticiones.
+         min/initial = 10 (conexiones listas, sin latencia de arranque)
+         max = 50 por nodo  (2 nodos -> 100 conexiones, < max_connections) -->
+    <pool>
+      <min-pool-size>10</min-pool-size>
+      <initial-pool-size>10</initial-pool-size>
+      <max-pool-size>50</max-pool-size>
+      <prefill>true</prefill>
+      <flush-strategy>IdleConnections</flush-strategy>
+    </pool>
+
+    <security>
+      <user-name>votacion_app</user-name>
+      <password>CAMBIAR_EN_DESPLIEGUE</password>
+    </security>
+
+    <!-- Validacion: detecta y descarta conexiones muertas antes de usarlas -->
+    <validation>
+      <valid-connection-checker
+        class-name="org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLValidConnectionChecker"/>
+      <background-validation>true</background-validation>
+      <background-validation-millis>30000</background-validation-millis>
+      <exception-sorter
+        class-name="org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLExceptionSorter"/>
+    </validation>
+
+    <!-- ============ TIMEOUTS (fail-fast) ============
+         blocking-timeout: si en 5s no hay conexion libre, la peticion
+         falla rapido en vez de colgar hilos indefinidamente. Bajo un
+         pico, es preferible rechazar y reintentar via JMS que acumular
+         miles de hilos bloqueados que tumban el nodo. -->
+    <timeout>
+      <blocking-timeout-millis>5000</blocking-timeout-millis>
+      <idle-timeout-minutes>5</idle-timeout-minutes>
+    </timeout>
+
+    <!-- Prepared statements en cache: menos parsing en MySQL -->
+    <statement>
+      <prepared-statement-cache-size>64</prepared-statement-cache-size>
+      <share-prepared-statements>true</share-prepared-statements>
+    </statement>
+
+  </datasource>
+</datasources>

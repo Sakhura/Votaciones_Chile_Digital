@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  POM PADRE (reactor) - Sistema de Votacion Digital Nacional
+  Ruta:  votacion-parent/pom.xml
+
+  Define los 4 modulos, las versiones centralizadas y la gestion de
+  dependencias. Al abrir este pom en IntelliJ IDEA, el IDE importa el
+  reactor completo y reconoce las 4 capas como modulos.
+
+  Empaquetado final: un unico WAR (votacion-web) que incluye los jars
+  de las otras capas en WEB-INF/lib.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+           http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cl.gob.votacion</groupId>
+    <artifactId>votacion-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Sistema de Votacion Nacional - Parent</name>
+
+    <properties>
+        <maven.compiler.release>17</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jakartaee.version>10.0.0</jakartaee.version>
+        <primefaces.version>14.0.0</primefaces.version>
+    </properties>
+
+    <modules>
+        <module>votacion-domain</module>
+        <module>votacion-persistence</module>
+        <module>votacion-service</module>
+        <module>votacion-web</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- API completa de Jakarta EE 10 (la provee WildFly en runtime) -->
+            <dependency>
+                <groupId>jakarta.platform</groupId>
+                <artifactId>jakarta.jakartaee-api</artifactId>
+                <version>${jakartaee.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- PrimeFaces 14 (namespace jakarta nativo, sin classifier) -->
+            <dependency>
+                <groupId>org.primefaces</groupId>
+                <artifactId>primefaces</artifactId>
+                <version>${primefaces.version}</version>
+            </dependency>
+
+            <!-- Modulos internos: versionados junto al reactor -->
+            <dependency>
+                <groupId>cl.gob.votacion</groupId>
+                <artifactId>votacion-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cl.gob.votacion</groupId>
+                <artifactId>votacion-persistence</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cl.gob.votacion</groupId>
+                <artifactId>votacion-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>3.4.0</version>
+                    <configuration>
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

@@ -1,0 +1,13 @@
+Copie el JAR del driver MySQL en la carpeta main/ junto a module.xml:
+    mysql-connector-j-8.4.0.jar
+Descarga: https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/
+
+Luego copie toda la carpeta com/ a:
+    $WILDFLY_HOME/modules/
+
+Y registre el driver en standalone-full.xml (subsistema datasources):
+    <drivers>
+      <driver name="mysql" module="com.mysql">
+        <driver-class>com.mysql.cj.jdbc.Driver</driver-class>
+      </driver>
+    </drivers>

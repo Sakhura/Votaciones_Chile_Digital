@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Configuracion de Faces. En Jakarta EE 10 la navegacion es implicita por
+  convencion (el outcome "votacion.xhtml" navega a esa vista), por lo que
+  este archivo queda minimo. Se incluye para reglas explicitas futuras.
+-->
+<faces-config xmlns="https://jakarta.ee/xml/ns/jakartaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_4_0.xsd"
+              version="4.0">
+</faces-config>

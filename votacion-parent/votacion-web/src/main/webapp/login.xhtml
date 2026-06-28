@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Vista de ingreso - Sistema de Votacion
+  Ruta: votacion-web/src/main/webapp/login.xhtml
+-->
+<!DOCTYPE html>
+<html lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:pt="jakarta.faces.passthrough">
+<h:head>
+    <title>Votacion Nacional - Ingreso</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <h:outputStylesheet name="css/votacion.css"/>
+</h:head>
+<h:body>
+    <a href="#contenido" class="enlace-salto">Saltar al contenido</a>
+
+    <main id="contenido" role="main" class="contenedor">
+        <h1>Votacion nacional</h1>
+        <p class="subtitulo">Ingrese su RUT y su clave para votar.</p>
+
+        <h:form id="formLogin" prependId="false">
+            <!-- Region viva: los lectores de pantalla anuncian los errores -->
+            <div aria-live="assertive">
+                <h:messages id="msgs" styleClass="mensajes" errorClass="msg-error"/>
+            </div>
+
+            <div class="campo">
+                <h:outputLabel for="rut" value="RUT"/>
+                <h:inputText id="rut" value="#{loginBean.rut}" required="true"
+                             requiredMessage="Ingrese su RUT."
+                             autocomplete="username"
+                             pt:aria-required="true" pt:autofocus="true"/>
+            </div>
+
+            <div class="campo">
+                <h:outputLabel for="clave" value="Clave"/>
+                <h:inputSecret id="clave" value="#{loginBean.credencial}" required="true"
+                               requiredMessage="Ingrese su clave."
+                               autocomplete="current-password"
+                               pt:aria-required="true"/>
+            </div>
+
+            <h:commandButton value="Ingresar"
+                             action="#{loginBean.autenticar}"
+                             styleClass="btn btn-primario"/>
+        </h:form>
+    </main>
+</h:body>
+</html>

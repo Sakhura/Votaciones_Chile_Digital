@@ -1,0 +1,26 @@
+<!--
+  Configuracion de la cola de votos (Apache Artemis embebido en WildFly).
+  Ruta: se inserta en $WILDFLY_HOME/standalone/configuration/standalone-full.xml
+        dentro de  <subsystem xmlns="urn:jboss:domain:messaging-activemq:...">
+                      <server name="default"> ... </server>
+
+  IMPORTANTE: arrancar WildFly con el perfil FULL:
+     ./standalone.sh -c standalone-full.xml
+
+  La cola es DURABLE por defecto: los mensajes se persisten en disco, asi
+  que sobreviven a un reinicio del servidor o a una caida de la BD.
+-->
+
+<!-- Dentro de <server name="default"> del subsistema messaging-activemq: -->
+
+<jms-queue name="ColaVotos"
+           entries="java:/jms/cola/votos java:jboss/exported/jms/cola/votos"/>
+
+<!--
+  Recomendado: una cola de mensajes muertos (DLQ) para "mensajes veneno"
+  (votos que fallan repetidamente). Tras N reintentos, el mensaje va a la
+  DLQ para inspeccion manual en vez de bloquear la cola principal.
+  Se configura en <address-setting match="jms.queue.ColaVotos">:
+      <dead-letter-address>jms.queue.DLQ</dead-letter-address>
+      <max-delivery-attempts>5</max-delivery-attempts>
+-->

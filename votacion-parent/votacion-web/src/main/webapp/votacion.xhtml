@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Vista de votacion - Sistema de Votacion
+  Ruta: votacion-web/src/main/webapp/votacion.xhtml
+
+  Accesibilidad:
+   - fieldset/legend agrupa semanticamente las opciones de voto.
+   - cada candidato es un radio nativo con etiqueta asociada.
+   - region aria-live anuncia el resultado.
+   - boton grande, foco visible (ver votacion.css).
+  Anti-doble-voto:
+   - cliente: confirma y deshabilita el boton (votacion.js).
+   - servidor: token de un solo uso + sesion invalidada al votar.
+-->
+<!DOCTYPE html>
+<html lang="es"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:pt="jakarta.faces.passthrough">
+<h:head>
+    <title>Votacion Nacional - Emitir voto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <h:outputStylesheet name="css/votacion.css"/>
+    <h:outputScript name="js/votacion.js"/>
+</h:head>
+<h:body>
+    <!-- Guarda de acceso: sin sesion valida, redirige al login -->
+    <f:metadata>
+        <f:viewAction action="#{votacionBean.verificarAcceso}"/>
+    </f:metadata>
+
+    <a href="#contenido" class="enlace-salto">Saltar al contenido</a>
+
+    <main id="contenido" role="main" class="contenedor">
+        <h1>Emitir voto</h1>
+
+        <h:form id="formVoto" prependId="false">
+            <div aria-live="polite">
+                <h:messages id="msgs" styleClass="mensajes"
+                            errorClass="msg-error" infoClass="msg-info" warnClass="msg-warn"/>
+            </div>
+
+            <!-- Si ya voto, ocultamos las opciones -->
+            <h:panelGroup layout="block" rendered="#{not votacionBean.votoEmitido}">
+                <fieldset class="opciones">
+                    <legend>Seleccione un candidato</legend>
+
+                    <p:selectOneRadio id="candidato"
+                                      value="#{votacionBean.candidatoSeleccionado}"
+                                      layout="responsive" columns="1"
+                                      styleClass="lista-candidatos">
+                        <f:selectItems value="#{votacionBean.candidatos}"
+                                       var="c"
+                                       itemValue="#{c.id}"
+                                       itemLabel="#{c.numeroPapeleta}. #{c.nombre} (#{c.partido})"/>
+                    </p:selectOneRadio>
+                </fieldset>
+
+                <h:commandButton id="btnVotar" value="Emitir voto"
+                                 action="#{votacionBean.emitirVoto}"
+                                 styleClass="btn btn-primario btn-grande"
+                                 onclick="return Votacion.confirmarYBloquear(this);">
+                    <f:ajax execute="@form" render="@form"
+                            onevent="Votacion.alCompletar"/>
+                </h:commandButton>
+            </h:panelGroup>
+
+            <!-- Confirmacion final -->
+            <h:panelGroup layout="block" rendered="#{votacionBean.votoEmitido}"
+                          styleClass="confirmacion" role="status">
+                <p class="check">Voto registrado</p>
+                <p>Gracias. Su participacion quedo registrada de forma anonima.</p>
+                <h:outputLink value="login.xhtml" styleClass="btn">Finalizar</h:outputLink>
+            </h:panelGroup>
+        </h:form>
+    </main>
+</h:body>
+</html>
