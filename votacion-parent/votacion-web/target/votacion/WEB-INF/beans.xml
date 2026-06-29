@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Activacion de CDI - Sistema de Votacion
+  Ruta:  votacion-web/src/main/webapp/WEB-INF/beans.xml
+
+  bean-discovery-mode="all": CDI gestiona todos los beans del modulo.
+  Para el piloto simplifica el cableado. En produccion suele preferirse
+  "annotated" (solo beans con anotaciones de scope) por rendimiento de
+  arranque, pero "all" es mas didactico y comodo al inicio.
+
+  NOTA: cada modulo jar que contenga beans CDI (service, persistence)
+  necesita su propio META-INF/beans.xml.
+-->
+<beans xmlns="https://jakarta.ee/xml/ns/jakartaee"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+         https://jakarta.ee/xml/ns/jakartaee/beans_4_0.xsd"
+       version="4.0"
+       bean-discovery-mode="all">
+</beans>

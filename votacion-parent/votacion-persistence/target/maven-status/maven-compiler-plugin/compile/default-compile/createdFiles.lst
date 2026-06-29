@@ -1,0 +1,3 @@
+cl\gob\votacion\persistence\repository\VotoRepository.class
+cl\gob\votacion\persistence\repository\CandidatoRepository.class
+cl\gob\votacion\persistence\repository\VotanteRepository.class

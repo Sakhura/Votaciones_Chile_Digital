@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Sistema de Votacion Digital Nacional
+  Unidad de persistencia JPA 3.1 (Jakarta EE 10) sobre Hibernate ORM 6.
+
+  Ruta en el proyecto:
+     src/main/resources/META-INF/persistence.xml
+
+  Notas clave de mision critica:
+   - transaction-type = JTA: las transacciones las gestiona el servidor
+     (WildFly) de forma declarativa via EJB (CMT). No abrimos/cerramos
+     transacciones a mano -> menos errores de fugas de conexion.
+   - hbm2ddl = "validate": Hibernate NUNCA crea ni altera tablas. El
+     esquema lo gobierna Flyway (V1__esquema_inicial.sql). En un sistema
+     electoral, que el ORM modifique el esquema seria inaceptable.
+   - Batching activado: los votos se insertan en lotes (ver punto 5),
+     reduciendo viajes de red a MySQL bajo carga.
+-->
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+               https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+
+  <persistence-unit name="votacionPU" transaction-type="JTA">
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+    <!-- DataSource JTA gestionado por WildFly (definido en votacion-ds.xml) -->
+    <jta-data-source>java:/jdbc/VotacionDS</jta-data-source>
+
+    <!-- Entidades de la unidad -->
+    <class>cl.gob.votacion.domain.entity.Eleccion</class>
+    <class>cl.gob.votacion.domain.entity.Candidato</class>
+    <class>cl.gob.votacion.domain.entity.Votante</class>
+    <class>cl.gob.votacion.domain.entity.Voto</class>
+    <class>cl.gob.votacion.domain.entity.AuditoriaEvento</class>
+
+    <!-- Sin cache de 2do nivel: los votos son de escritura unica y el
+         conteo debe ser siempre fresco. Evita inconsistencias sutiles. -->
+    <shared-cache-mode>NONE</shared-cache-mode>
+    <validation-mode>AUTO</validation-mode>
+
+    <properties>
+      <!-- Dialecto MySQL 8 (Hibernate 6 autodetecta la version) -->
+      <property name="hibernate.dialect"
+                value="org.hibernate.dialect.MySQLDialect"/>
+
+      <!-- El ORM solo valida el esquema, nunca lo modifica -->
+      <property name="hibernate.hbm2ddl.auto" value="none"/>
+
+      <!-- ===== Afinamiento para carga masiva ===== -->
+      <!-- Inserta votos en lotes de 50 en lugar de uno por uno -->
+      <property name="hibernate.jdbc.batch_size" value="50"/>
+      <property name="hibernate.order_inserts" value="true"/>
+      <property name="hibernate.order_updates" value="true"/>
+      <property name="hibernate.jdbc.batch_versioned_data" value="true"/>
+
+      <!-- Aislamiento READ_COMMITTED (2): menos gap-locks bajo escritura -->
+      <property name="hibernate.connection.isolation" value="2"/>
+
+      <!-- Hibernate no toca autocommit en cada query: deja que JTA mande -->
+      <property name="hibernate.connection.provider_disables_autocommit"
+                value="true"/>
+
+      <!-- Produccion: false. Activar solo para depurar SQL en desarrollo -->
+      <property name="hibernate.show_sql" value="false"/>
+      <property name="hibernate.format_sql" value="false"/>
+      <property name="hibernate.generate_statistics" value="false"/>
+    </properties>
+  </persistence-unit>
+</persistence>

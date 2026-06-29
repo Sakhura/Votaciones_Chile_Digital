@@ -1,0 +1,123 @@
+/*
+  Estilos del Sistema de Votacion - enfoque en ACCESIBILIDAD.
+  Ruta: votacion-web/src/main/webapp/resources/css/votacion.css
+
+  Principios: alto contraste, texto grande, objetivos tactiles >= 44px,
+  foco de teclado siempre visible, sin animaciones gratuitas.
+*/
+
+:root {
+    --tinta: #1a1a1a;
+    --fondo: #ffffff;
+    --primario: #0a4d8c;     /* azul institucional, contraste AAA sobre blanco */
+    --primario-foco: #063a6b;
+    --error: #b00020;
+    --ok: #1b6e2e;
+    --borde: #6b7280;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: system-ui, "Segoe UI", Arial, sans-serif;
+    font-size: 1.125rem;          /* 18px base: legible para mayores */
+    line-height: 1.6;
+    color: var(--tinta);
+    background: var(--fondo);
+    margin: 0;
+}
+
+.contenedor {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem;
+}
+
+h1 { font-size: 2rem; margin: 0 0 .5rem; }
+.subtitulo { color: #333; margin-top: 0; }
+
+/* Enlace de salto: oculto hasta recibir foco por teclado */
+.enlace-salto {
+    position: absolute;
+    left: -999px;
+}
+.enlace-salto:focus {
+    left: 1rem; top: 1rem;
+    position: fixed;
+    background: var(--primario);
+    color: #fff;
+    padding: .75rem 1rem;
+    z-index: 100;
+}
+
+.campo { margin-bottom: 1.25rem; }
+.campo label { display: block; font-weight: 600; margin-bottom: .35rem; }
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+    min-height: 48px;
+    font-size: 1.125rem;
+    padding: .5rem .75rem;
+    border: 2px solid var(--borde);
+    border-radius: 6px;
+}
+
+/* Foco SIEMPRE visible: requisito de accesibilidad por teclado */
+:focus-visible {
+    outline: 3px solid #ffae00;
+    outline-offset: 2px;
+}
+
+/* Opciones de voto */
+.opciones {
+    border: 2px solid var(--borde);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+}
+.opciones legend { font-weight: 700; font-size: 1.25rem; padding: 0 .5rem; }
+
+.lista-candidatos label {
+    display: inline-block;
+    min-height: 44px;            /* objetivo tactil comodo */
+    padding: .5rem .25rem;
+    cursor: pointer;
+}
+.lista-candidatos input[type="radio"] {
+    width: 1.5rem; height: 1.5rem;
+    margin-right: .75rem;
+    vertical-align: middle;
+}
+
+/* Botones */
+.btn {
+    display: inline-block;
+    min-height: 48px;
+    font-size: 1.125rem;
+    padding: .75rem 1.5rem;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    background: #e5e7eb;
+    color: var(--tinta);
+    text-decoration: none;
+    cursor: pointer;
+}
+.btn-primario { background: var(--primario); color: #fff; }
+.btn-primario:hover { background: #08305a; }
+.btn-grande { width: 100%; font-size: 1.25rem; min-height: 56px; margin-top: 1rem; }
+.btn:disabled { background: #9ca3af; cursor: not-allowed; }
+
+/* Mensajes */
+.mensajes { margin: 1rem 0; padding: 0; list-style: none; }
+.msg-error { color: var(--error); font-weight: 600; }
+.msg-info  { color: var(--ok);    font-weight: 600; }
+.msg-warn  { color: #8a6d00;      font-weight: 600; }
+
+/* Confirmacion */
+.confirmacion { text-align: center; padding: 2rem 1rem; }
+.confirmacion .check { font-size: 1.5rem; font-weight: 700; color: var(--ok); }
+
+/* Respeta la preferencia de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+}

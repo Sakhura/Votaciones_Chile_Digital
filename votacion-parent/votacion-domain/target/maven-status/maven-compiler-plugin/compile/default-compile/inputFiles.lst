@@ -1,0 +1,11 @@
+D:\Proyectos\Votaciones_Chile_Digital\votacion-nacional-prototipo\votacion-parent\votacion-domain\src\main\java\cl\gob\votacion\domain\dto\SesionVoto.java
+D:\Proyectos\Votaciones_Chile_Digital\votacion-nacional-prototipo\votacion-parent\votacion-domain\src\main\java\cl\gob\votacion\domain\dto\SolicitudVoto.java
+D:\Proyectos\Votaciones_Chile_Digital\votacion-nacional-prototipo\votacion-parent\votacion-domain\src\main\java\cl\gob\votacion\domain\entity\AuditoriaEvento.java
+D:\Proyectos\Votaciones_Chile_Digital\votacion-nacional-prototipo\votacion-parent\votacion-domain\src\main\java\cl\gob\votacion\domain\entity\Candidato.java
+D:\Proyectos\Votaciones_Chile_Digital\votacion-nacional-prototipo\votacion-parent\votacion-domain\src\main\java\cl\gob\votacion\domain\entity\Eleccion.java
+D:\Proyectos\Votaciones_Chile_Digital\votacion-nacional-prototipo\votacion-parent\votacion-domain\src\main\java\cl\gob\votacion\domain\entity\EstadoVoto.java
+D:\Proyectos\Votaciones_Chile_Digital\votacion-nacional-prototipo\votacion-parent\votacion-domain\src\main\java\cl\gob\votacion\domain\entity\Votante.java
+D:\Proyectos\Votaciones_Chile_Digital\votacion-nacional-prototipo\votacion-parent\votacion-domain\src\main\java\cl\gob\votacion\domain\entity\Voto.java
+D:\Proyectos\Votaciones_Chile_Digital\votacion-nacional-prototipo\votacion-parent\votacion-domain\src\main\java\cl\gob\votacion\domain\exception\CredencialInvalidaException.java
+D:\Proyectos\Votaciones_Chile_Digital\votacion-nacional-prototipo\votacion-parent\votacion-domain\src\main\java\cl\gob\votacion\domain\exception\DobleVotoException.java
+D:\Proyectos\Votaciones_Chile_Digital\votacion-nacional-prototipo\votacion-parent\votacion-domain\src\main\java\cl\gob\votacion\domain\exception\VotanteNoHabilitadoException.java

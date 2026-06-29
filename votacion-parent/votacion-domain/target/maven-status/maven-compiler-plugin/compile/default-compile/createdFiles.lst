@@ -1,0 +1,11 @@
+cl\gob\votacion\domain\entity\AuditoriaEvento.class
+cl\gob\votacion\domain\exception\DobleVotoException.class
+cl\gob\votacion\domain\entity\EstadoVoto.class
+cl\gob\votacion\domain\dto\SolicitudVoto.class
+cl\gob\votacion\domain\entity\Votante.class
+cl\gob\votacion\domain\dto\SesionVoto.class
+cl\gob\votacion\domain\entity\Candidato.class
+cl\gob\votacion\domain\exception\VotanteNoHabilitadoException.class
+cl\gob\votacion\domain\entity\Eleccion.class
+cl\gob\votacion\domain\entity\Voto.class
+cl\gob\votacion\domain\exception\CredencialInvalidaException.class

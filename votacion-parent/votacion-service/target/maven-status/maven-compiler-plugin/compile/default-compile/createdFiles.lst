@@ -1,0 +1,9 @@
+cl\gob\votacion\service\audit\TipoEvento.class
+cl\gob\votacion\service\jms\ConsumidorVotoMDB.class
+cl\gob\votacion\service\voto\VotoService.class
+cl\gob\votacion\service\security\TokenService.class
+cl\gob\votacion\service\audit\AuditoriaService.class
+cl\gob\votacion\service\CargaDatosPrueba.class
+cl\gob\votacion\service\security\HashService.class
+cl\gob\votacion\service\voto\VotoServiceImpl.class
+cl\gob\votacion\service\auth\AutenticacionService.class
